@@ -1,0 +1,23 @@
+models:
+  - name: base_customers
+    description: "This is the base model for the customers table"
+    columns:
+      - name: customer_id
+        description: "The unique identifier for each customer. Primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: first_name
+        description: "The first name of the customer."
+        tests:
+          - not_null
+      - name: last_name
+        description: "The last name of the customer."
+        tests:
+          - not_null
+      - name: email
+        description: "The email address of the customer."
+        tests:
+          - not_null
+      - name: country
+        description: "The country of the customer."

@@ -1,0 +1,43 @@
+models:
+  - name: base_orderitems
+    description: "This is the base model for the orderitems table"
+    columns:
+      - name: orderitem_id
+        description: "The unique identifier for each order item. Primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: order_id
+        description: "The identifier for the order to which the item belongs. Foreign key referencing the orders table."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('base_orders')
+                field: order_id
+      - name: product_id
+        description: "The identifier for the product being ordered. Foreign key referencing the product table."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('base_product')
+                field: product_id
+      - name: quantity
+        description: "The quantity of the product being ordered."
+        tests:
+          - not_null
+      - name: supplier_id
+        description: "The identifier for the supplier of the product. Foreign key referencing the supplier table."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('base_supplier')
+                field: supplier_id
+      - name: subtotal
+        description: "The subtotal for the order item, calculated as quantity multiplied by the product price."
+        tests:
+          - not_null
+      - name: discount
+        description: "The discount applied to the order item, if any."              

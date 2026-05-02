@@ -1,0 +1,27 @@
+models:
+  - name: base_campaign_product_subcategory
+    description: "This is the base model for the campaign_product_subcategory table"
+    columns:
+      - name: campaign_product_subcategory_id
+        description: "The unique identifier for each record. Primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: campaign_id
+        description: "The unique identifier for each marketing campaign. Foreign key referencing the marketing_campaigns table."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('base_marketing_campaigns')
+                field: campaign_id
+      - name: subcategory_id
+        description: "The unique identifier for each subcategory. Foreign key referencing the subcategory table."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('base_subcategory')
+                field: subcategory_id
+      - name: discounts
+        description: "The discount percentage offered for the subcategory in the campaign."

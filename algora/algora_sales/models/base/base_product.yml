@@ -1,0 +1,27 @@
+models:
+  - name: base_product
+    description: "This is the base model for the product table"
+    columns:
+      - name: product_id
+        description: "The unique identifier for each product. Primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: name
+        description: "The name of the product."
+        tests:
+          - not_null
+      - name: price
+        description: "The price of the product."
+        tests:
+          - not_null              
+      - name: description
+        description: "A brief description of the product."
+      - name: subcategory_id
+        description: "The identifier for the subcategory to which the product belongs. Foreign key referencing the subcategory table."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('base_subcategory')
+                field: subcategory_id

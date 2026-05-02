@@ -1,0 +1,43 @@
+models:
+  - name: base_orders
+    description: "This is the base model for the orders table"
+    columns:
+      - name: order_id
+        description: "The unique identifier for each order. Primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: "The identifier for the customer who placed the order. Foreign key referencing the customers table."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('base_customers')
+                field: customer_id
+      - name: order_date
+        description: "The date when the order was placed."
+        tests:
+          - not_null
+      - name: total_amount
+        description: "The total amount for the order."
+      - name: campaign_id
+        description: "The identifier for the marketing campaign associated with the order, if any. Foreign key referencing the marketing_campaigns table."
+        tests:
+          - relationships:
+              arguments:
+                to: ref('base_marketing_campaigns')
+                field: campaign_id
+      - name: amount          
+        description: "The total amount for the order."
+        tests:
+          - not_null
+      - name: payment_method_id
+        description: "The identifier for the payment method used for the order. Foreign key referencing the payment_method table."
+        tests:  
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('base_payment_method')
+                field: payment_method_id
+                

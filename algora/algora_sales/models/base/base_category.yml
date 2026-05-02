@@ -1,0 +1,13 @@
+models:
+  - name: base_category
+    description: "This is the base model for the category table"
+    columns:
+      - name: category_id
+        description: "The unique identifier for each category. Primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: category_name
+        description: "The name of the category."
+        tests:
+          - not_null

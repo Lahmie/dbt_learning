@@ -1,0 +1,17 @@
+models:
+  - name: base_supplier
+    description: "This is the base model for the supplier table"
+    columns:
+      - name: supplier_id
+        description: "The unique identifier for each supplier. Primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: supplier_name
+        description: "The name of the supplier."
+        tests:
+          - not_null
+      - name: email
+        description: "The email address of the supplier."
+        tests:
+          - not_null    

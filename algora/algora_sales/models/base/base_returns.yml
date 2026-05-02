@@ -1,0 +1,30 @@
+models:
+  - name: base_returns
+    description: This is the base model for the returns table 
+    columns:
+      - name: return_id
+        description: "The unique identifier for each return. Primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: order_id
+        description: "The unique identifier for the order associated with the return."
+        tests:
+          - not_null
+      - name: product_id
+        description: "The unique identifier for the product being returned."
+        tests:
+          - not_null    
+      - name: return_date
+        description: "The date when the return was processed."
+        tests:
+          - not_null
+      - name: reason
+        description: "The reason for the return."
+        tests:
+          - not_null
+      - name: amount_refunded
+        description: "The amount refunded to the customer for the return."
+        tests:
+          - not_null    
+

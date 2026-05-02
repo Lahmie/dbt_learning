@@ -1,0 +1,37 @@
+models:
+  - name: base_customer_product_ratings
+    description: "This is the base model for the customer_product_ratings table"
+    columns:
+      - name: customerproductrating_id
+        description: "The unique identifier for each record. Primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: "The unique identifier for each customer. Foreign key referencing the customers table."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('base_customers')
+                field: customer_id
+      - name: product_id
+        description: "The unique identifier for each product. Foreign key referencing the product table."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('base_product')
+                field: product_id
+      - name: ratings
+        description: "The rating given by the customer to the product, typically on a scale of 1 to 5."
+      - name: review
+        description: "The review text provided by the customer for the product."
+      - name: sentiment
+        description: "The sentiment of the review, which can be categorized as good or bad"
+        tests:
+          - accepted_values:
+              arguments:
+                values: 
+                - 'good'
+                - 'bad'
