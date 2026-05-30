@@ -1,0 +1,12 @@
+exposures:
+  - name: orders_data
+    label: orders_data
+    type: notebook
+    maturity: high
+    url: https://tinyurl.com/jaffle-shop-reporting
+    description: 'Exposure for orders data'
+    depends_on:
+      - ref('orders')
+    owner:
+      name: Anisah
+      email: anisatolapade@gmail.com
