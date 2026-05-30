@@ -1,0 +1,31 @@
+models:
+  - name: prep_agents
+    description: "Prep model for agents, joining agent details with their office information."
+    columns:
+      - name: agent_id
+        description: "The unique identifier for each agent. Primary key for this model."
+        tests:
+          - unique
+          - not_null
+      - name: agent_name
+        description: "The full name of the real estate agent."
+        tests:
+          - not_null
+      - name: level
+        description: "The seniority level of the agent."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - 'Junior'
+                  - 'Senior'
+                  - 'Partner'
+      - name: office_name
+        description: "The name of the office the agent belongs to."
+        tests:
+          - not_null
+      - name: address
+        description: "The address of the agent's office."
+        tests:
+          - not_null

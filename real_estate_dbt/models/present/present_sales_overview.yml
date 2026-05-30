@@ -1,0 +1,28 @@
+models:
+  - name: present_sales_overview
+    description: "Monthly sales summary by region, showing transaction volume and revenue trends over time."
+    columns:
+      - name: year
+        description: "The calendar year of the transactions."
+        tests:
+          - not_null
+      - name: month_of_year
+        description: "The month number of the transactions (1–12)."
+        tests:
+          - not_null
+      - name: region
+        description: "The region where the transacted properties are located."
+        tests:
+          - not_null
+      - name: total_transactions
+        description: "The total number of transactions in that month and region."
+        tests:
+          - not_null
+      - name: total_revenue
+        description: "The sum of all transaction prices in that month and region."
+        tests:
+          - not_null
+      - name: avg_deal_size
+        description: "The average transaction price in that month and region."
+        tests:
+          - not_null

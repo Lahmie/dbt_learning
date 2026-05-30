@@ -1,0 +1,29 @@
+models:
+  - name: base_db_properties
+    description: "This is the base model for the db_properties table"
+    columns:
+      - name: property_id
+        description: "The unique identifier for each property. Primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: address
+        description: "The physical address of the property."
+        tests:
+          - not_null
+      - name: suburb_id
+        description: "The unique identifier for each suburb. Foreign key referencing the location_hierarchy table."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('base_location_hierarchy')
+                field: suburb_id
+      - name: type_code
+        description: "The type of the property (e.g., apartment, house). Foreign key referencing the property_types table."
+        tests:
+          - not_null  
+          - relationships:
+              arguments:
+                to: ref('base_property_types')
+                field: type_code

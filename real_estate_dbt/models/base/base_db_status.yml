@@ -1,0 +1,20 @@
+models:
+  - name: base_db_status
+    description: "This is the base model for the db_status table"
+    columns:
+      - name: status_id
+        description: "The unique identifier for each status. Primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: status
+        description: "Status of the transaction."
+        tests:
+          - accepted_values:
+              arguments:
+                values:
+                - "Pending"
+                - "Completed"
+                - "Cancelled"
+            
+      
