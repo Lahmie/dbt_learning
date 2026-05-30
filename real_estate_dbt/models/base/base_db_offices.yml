@@ -1,0 +1,17 @@
+models:
+  - name: base_db_offices
+    description: "This is the base model for the db_offices table"
+    columns:
+      - name: office_id
+        description: "The unique identifier for each office. Primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: office_name
+        description: "The name of the real estate office."
+        tests:
+          - not_null
+      - name: address
+        description: "The physical address of the real estate office."
+        tests:
+          - not_null

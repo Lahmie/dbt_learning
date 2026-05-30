@@ -1,0 +1,36 @@
+models:
+  - name: dim_agent
+    description: "Agent dimension table containing agent details and their office information, with a surrogate key."
+    columns:
+      - name: agent_key
+        description: "Surrogate key for the agent dimension, generated from agent_id."
+        tests:
+          - unique
+          - not_null
+      - name: agent_id
+        description: "The natural key for the agent sourced from the transactional system."
+        tests:
+          - unique
+          - not_null
+      - name: agent_name
+        description: "The full name of the real estate agent."
+        tests:
+          - not_null
+      - name: level
+        description: "The seniority level of the agent."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - 'Junior'
+                  - 'Senior'
+                  - 'Partner'
+      - name: office_name
+        description: "The name of the office the agent belongs to."
+        tests:
+          - not_null
+      - name: office_address
+        description: "The street address of the agent's office."
+        tests:
+          - not_null

@@ -1,0 +1,25 @@
+models:
+  - name: base_location_hierarchy
+    description: "This is the base model for the location_hierarchy table"
+    columns:
+      - name: suburb_id
+        description: "The unique identifier for each suburb. Primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: suburb_name
+        description: "The name of the suburb."
+        tests:
+          - not_null
+      - name: postcode
+        description: "The postal code for the suburb."
+        tests:
+          - not_null
+      - name: state
+        description: "The state in which the suburb is located."
+        tests:
+          - not_null
+      - name: region
+        description: "The region in which the suburb is located."
+        tests:
+          - not_null    

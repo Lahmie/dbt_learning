@@ -1,0 +1,17 @@
+models:
+  - name: base_db_clients
+    description: "This is the base model for the db_clients table"
+    columns:
+      - name: client_id
+        description: "The unique identifier for each client. Primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: client_name
+        description: "The name of the real estate client."
+        tests:
+          - not_null
+      - name: email
+        description: "The email address of the real estate client."
+        tests:
+          - not_null

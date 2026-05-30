@@ -1,0 +1,30 @@
+models:
+  - name: base_db_agents
+    description: "This is the base model for the db_agents table"
+    columns:
+      - name: agent_id
+        description: "The unique identifier for each agent. Primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: agent_name
+        description: "The name of the real estate agent."
+        tests:
+          - not_null
+      - name: office_id
+        description: "The unique identifier for each office. Foreign key referencing the offices table."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('base_db_offices')
+                field: office_id
+      - name: level
+        description: "The level of the agent, which can be categorized as junior, senior, or partner."
+        tests:
+          - accepted_values:
+              arguments:
+                values: 
+                - 'Junior'
+                - 'Senior'
+                - 'Partner'

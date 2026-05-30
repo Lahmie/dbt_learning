@@ -1,0 +1,25 @@
+models:
+  - name: present_agent_performance
+    description: "Agent performance summary for completed transactions, including deal count, revenue, and average deal metrics."
+    columns:
+      - name: agent_name
+        description: "The name of the agent. One row per agent."
+        tests:
+          - unique
+          - not_null
+      - name: total_deals_closed
+        description: "The total number of completed transactions handled by the agent."
+        tests:
+          - not_null
+      - name: total_revenue_generated
+        description: "The total sum of prices across all completed transactions for the agent."
+        tests:
+          - not_null
+      - name: avg_duration_of_deals_closed
+        description: "The average number of days taken to close a deal for the agent."
+        tests:
+          - not_null
+      - name: avg_deal_size
+        description: "The average transaction price across all completed deals for the agent."
+        tests:
+          - not_null

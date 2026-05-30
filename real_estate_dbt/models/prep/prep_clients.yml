@@ -1,0 +1,17 @@
+models:
+  - name: prep_clients
+    description: "Prep model for clients, sourced directly from the base clients model."
+    columns:
+      - name: client_id
+        description: "The unique identifier for each client. Primary key for this model."
+        tests:
+          - unique
+          - not_null
+      - name: client_name
+        description: "The full name of the client."
+        tests:
+          - not_null
+      - name: email
+        description: "The email address of the client."
+        tests:
+          - not_null

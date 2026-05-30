@@ -1,0 +1,42 @@
+models:
+  - name: present_client_360
+    description: "One row per transaction per client, providing a full view of client activity including property type, agent, price, and deal status."
+    columns:
+      - name: client_name
+        description: "The full name of the client."
+        tests:
+          - not_null
+      - name: transaction_id
+        description: "The unique identifier for the transaction. One row per transaction."
+        tests:
+          - unique
+          - not_null
+      - name: price
+        description: "The sale price of the transaction."
+        tests:
+          - not_null
+      - name: transaction_completed_time
+        description: "The timestamp when the transaction was completed. Null if still in progress."
+      - name: status
+        description: "The status label of the transaction (e.g. completed, pending)."
+        tests:
+          - not_null
+      - name: is_completed
+        description: "Boolean flag indicating whether the transaction has been completed."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - true
+                  - false
+      - name: duration_days
+        description: "The number of days taken to complete the transaction. Null if still in progress."
+      - name: property_type
+        description: "The type name of the property involved in the transaction."
+        tests:
+          - not_null
+      - name: agent_name
+        description: "The name of the agent who handled the transaction."
+        tests:
+          - not_null

@@ -1,0 +1,59 @@
+models:
+  - name: fct_transactions
+    description: "Fact table for real estate transactions, linking to property, agent, and client dimensions via surrogate keys."
+    columns:
+      - name: transaction_key
+        description: "Surrogate key for the transaction fact, generated from transaction_id."
+        tests:
+          - unique
+          - not_null
+      - name: transaction_id
+        description: "The natural key for the transaction sourced from the transactional system."
+        tests:
+          - unique
+          - not_null
+      - name: property_key
+        description: "Foreign key referencing dim_property."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_property')
+                field: property_key
+      - name: agent_key
+        description: "Foreign key referencing dim_agent."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_agent')
+                field: agent_key
+      - name: client_key
+        description: "Foreign key referencing dim_client."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_client')
+                field: client_key
+      - name: price
+        description: "The transaction sale price."
+        tests:
+          - not_null
+      - name: transaction_created_time
+        description: "The timestamp when the transaction was created."
+        tests:
+          - not_null
+      - name: transaction_completed_time
+        description: "The timestamp when the transaction was completed. Null if still in progress."
+      - name: duration_days
+        description: "The number of days between transaction creation and completion. Null if still in progress."
+      - name: is_completed
+        description: "Boolean flag indicating whether the transaction has been completed."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - true
+                  - false

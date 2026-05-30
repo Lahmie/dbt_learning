@@ -1,0 +1,22 @@
+models:
+  - name: dim_client
+    description: "Client dimension table containing client contact details, with a surrogate key."
+    columns:
+      - name: client_key
+        description: "Surrogate key for the client dimension, generated from client_id."
+        tests:
+          - unique
+          - not_null
+      - name: client_id
+        description: "The natural key for the client sourced from the transactional system."
+        tests:
+          - unique
+          - not_null
+      - name: client_name
+        description: "The full name of the client."
+        tests:
+          - not_null
+      - name: email
+        description: "The email address of the client."
+        tests:
+          - not_null

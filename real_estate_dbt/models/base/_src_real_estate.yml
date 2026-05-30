@@ -1,0 +1,16 @@
+version: 2
+
+sources:
+  - name: transactional_data
+    database: RAW_REAL_ESTATE
+    schema: transactional_data
+    tables:
+      - name: db_agents
+      - name: db_clients
+      - name: db_offices
+      - name: db_properties
+      - name: db_status
+      - name: db_transactions
+      - name: location_hierarchy
+      - name: property_types
+      

@@ -1,0 +1,37 @@
+models:
+  - name: prep_properties
+    description: "Prep model for properties, joining property details with property type and location hierarchy."
+    columns:
+      - name: property_id
+        description: "The unique identifier for each property. Primary key for this model."
+        tests:
+          - unique
+          - not_null
+      - name: address
+        description: "The street address of the property."
+        tests:
+          - not_null
+      - name: type_name
+        description: "The descriptive name of the property type."
+        tests:
+          - not_null
+      - name: category
+        description: "The category the property type belongs to (e.g. residential, commercial)."
+        tests:
+          - not_null
+      - name: suburb_name
+        description: "The suburb where the property is located."
+        tests:
+          - not_null
+      - name: postcode
+        description: "The postcode of the property's suburb."
+        tests:
+          - not_null
+      - name: state
+        description: "The state where the property is located."
+        tests:
+          - not_null
+      - name: region
+        description: "The region where the property is located."
+        tests:
+          - not_null

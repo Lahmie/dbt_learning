@@ -1,0 +1,92 @@
+models:
+  - name: prep_transactions
+    description: "Fully denormalized prep model for transactions, joining transactions with properties, agents, clients, and status."
+    columns:
+      - name: transaction_id
+        description: "The unique identifier for each transaction. Primary key for this model."
+        tests:
+          - unique
+          - not_null
+      - name: type_name
+        description: "The descriptive name of the property type involved in the transaction."
+        tests:
+          - not_null
+      - name: category
+        description: "The category of the property type (e.g. residential, commercial)."
+        tests:
+          - not_null
+      - name: suburb_name
+        description: "The suburb where the transacted property is located."
+        tests:
+          - not_null
+      - name: postcode
+        description: "The postcode of the transacted property's suburb."
+        tests:
+          - not_null
+      - name: state
+        description: "The state where the transacted property is located."
+        tests:
+          - not_null
+      - name: region
+        description: "The region where the transacted property is located."
+        tests:
+          - not_null
+      - name: address
+        description: "The street address of the transacted property."
+        tests:
+          - not_null
+      - name: agent_name
+        description: "The name of the agent who handled the transaction."
+        tests:
+          - not_null
+      - name: level
+        description: "The seniority level of the agent who handled the transaction."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - 'Junior'
+                  - 'Senior'
+                  - 'Partner'
+      - name: office_name
+        description: "The name of the office the agent belongs to."
+        tests:
+          - not_null
+      - name: agents_office_address
+        description: "The address of the agent's office."
+        tests:
+          - not_null
+      - name: client_name
+        description: "The name of the client involved in the transaction."
+        tests:
+          - not_null
+      - name: client_email
+        description: "The email address of the client involved in the transaction."
+        tests:
+          - not_null
+      - name: status
+        description: "The current status of the transaction."
+        tests:
+          - not_null
+      - name: price
+        description: "The transaction price."
+        tests:
+          - not_null
+      - name: transaction_created_time
+        description: "The timestamp when the transaction was created."
+        tests:
+          - not_null
+      - name: transaction_completed_time
+        description: "The timestamp when the transaction was completed. Null if still in progress."
+      - name: duration_days
+        description: "The number of days between transaction creation and completion. Null if still in progress."
+      - name: is_completed
+        description: "Boolean flag indicating whether the transaction has been completed."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - true
+                  - false

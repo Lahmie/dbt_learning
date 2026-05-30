@@ -1,0 +1,65 @@
+models:
+  - name: dim_date
+    description: "Date dimension table spanning 2020-01-01 to 2030-12-31, generated using dbt_utils date_spine."
+    columns:
+      - name: date_key
+        description: "Surrogate key for the date dimension, generated from date_day."
+        tests:
+          - unique
+          - not_null
+      - name: date_day
+        description: "The calendar date. Natural key for this dimension."
+        tests:
+          - unique
+          - not_null
+      - name: day_of_month
+        description: "The day of the month (1–31)."
+        tests:
+          - not_null
+      - name: month_of_year
+        description: "The month number of the year (1–12)."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - 1
+                  - 2
+                  - 3
+                  - 4
+                  - 5
+                  - 6
+                  - 7
+                  - 8
+                  - 9
+                  - 10
+                  - 11
+                  - 12
+      - name: year
+        description: "The four-digit calendar year."
+        tests:
+          - not_null
+      - name: quarter
+        description: "The quarter of the year (1–4)."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - 1
+                  - 2
+                  - 3
+                  - 4
+      - name: day_of_week
+        description: "The day of the week as a number (1 = Sunday, 7 = Saturday in Snowflake)."
+        tests:
+          - not_null
+      - name: is_weekend
+        description: "Boolean flag indicating whether the date falls on a weekend."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - true
+                  - false
