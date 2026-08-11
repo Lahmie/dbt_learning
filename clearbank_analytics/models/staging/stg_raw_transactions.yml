@@ -1,0 +1,50 @@
+version: 2
+
+models:
+  - name: stg_raw_transactions
+    description: This is the staging model for raw transactions. One row per transaction event.
+    columns:
+      - name: transaction_id
+        description: Primary key.
+        tests:
+          - unique
+          - not_null
+      - name: account_id
+        tests:
+          - not_null
+      - name: card_id
+        description: Nullable — only populated for card-based transactions.
+      - name: transaction_date
+        tests:
+          - not_null
+      - name: amount
+        tests:
+          - not_null
+      - name: currency
+        tests:
+          - not_null
+      - name: type
+        tests:
+          - not_null
+          - accepted_values:
+              values: [debit, credit]
+      - name: status
+        tests:
+          - not_null
+          - accepted_values:
+              values: [completed, pending, reversed]
+      - name: description
+        description: Free-text transaction description. Nullable.
+      - name: reference_number
+        tests:
+          - not_null
+      - name: channel
+        tests:
+          - not_null
+          - accepted_values:
+              values: [atm, pos, mobile, web, transfer]
+      - name: reversal_of_transaction_id
+        description: Nullable — populated only for reversal transactions.
+      - name: created_at
+        tests:
+          - not_null

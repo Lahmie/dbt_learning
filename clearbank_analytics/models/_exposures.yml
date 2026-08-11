@@ -1,0 +1,30 @@
+version: 2
+
+exposures:
+  - name: customer_360_dashboard
+    label: Customer 360 Dashboard
+    type: dashboard
+    maturity: medium
+    url: https://bi.clearbank.internal/dashboards/customer-360
+    description: >
+      Customer support dashboard showing a single customer's account,
+      transaction and loan activity in one place.
+    depends_on:
+      - ref('mart_customer_360')
+    owner:
+      name: Analytics Engineering
+      email: analytics-eng@clearbank.example
+
+  - name: loan_health_report
+    label: Loan Health Report
+    type: analysis
+    maturity: medium
+    url: https://bi.clearbank.internal/reports/loan-health
+    description: >
+      Weekly finance report used by the credit risk team to monitor loan
+      repayment progress and flag at-risk / defaulted loans.
+    depends_on:
+      - ref('mart_loan_health')
+    owner:
+      name: Finance & Risk
+      email: risk@clearbank.example

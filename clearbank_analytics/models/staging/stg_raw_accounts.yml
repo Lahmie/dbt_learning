@@ -1,0 +1,42 @@
+version: 2
+
+models:
+  - name: stg_raw_accounts
+    description: This is the staging model for raw accounts. One row per account.
+    columns:
+      - name: account_id
+        description: Primary key.
+        tests:
+          - unique
+          - not_null
+      - name: account_number
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        tests:
+          - not_null
+      - name: account_type
+        tests:
+          - not_null
+          - accepted_values:
+              values: [current, savings]
+      - name: status
+        tests:
+          - not_null
+          - accepted_values:
+              values: [active, dormant, closed]
+      - name: currency
+        tests:
+          - not_null
+      - name: opened_date
+        tests:
+          - not_null
+      - name: closed_date
+        description: Nullable — populated only once the account is closed.
+      - name: created_at
+        tests:
+          - not_null
+      - name: updated_at
+        tests:
+          - not_null

@@ -1,0 +1,58 @@
+version: 2
+
+models:
+  - name: dim_date
+    description: >
+      Type 0 / static date dimension, generated via dbt_utils.date_spine covering
+      2018-01-01 to 2030-12-31. Also registered as the MetricFlow time spine for
+      the project's semantic models and metrics.
+    time_spine:
+      standard_granularity_column: date_day
+    columns:
+      - name: date_id
+        description: Surrogate key. Primary key.
+        tests:
+          - unique
+          - not_null
+      - name: date_day
+        description: Calendar date. Standard granularity column for the MetricFlow time spine.
+        granularity: day
+        tests:
+          - unique
+          - not_null
+      - name: week_number
+        tests:
+          - not_null
+      - name: month_number
+        tests:
+          - not_null
+      - name: month_name
+        tests:
+          - not_null
+      - name: quarter
+        tests:
+          - not_null
+      - name: year
+        tests:
+          - not_null
+      - name: day_of_week
+        tests:
+          - not_null
+      - name: day_name
+        tests:
+          - not_null
+      - name: is_weekend
+        tests:
+          - not_null
+      - name: is_month_start
+        tests:
+          - not_null
+      - name: is_month_end
+        tests:
+          - not_null
+      - name: is_quarter_start
+        tests:
+          - not_null
+      - name: is_quarter_end
+        tests:
+          - not_null

@@ -1,0 +1,109 @@
+version: 2
+
+semantic_models:
+  - name: transactions
+    description: Semantic model over fct_transactions for transaction-based metrics.
+    model: ref('fct_transactions')
+    defaults:
+      agg_time_dimension: transaction_date
+    entities:
+      - name: transaction
+        type: primary
+        expr: transaction_id
+      - name: customer
+        type: foreign
+        expr: customer_id
+      - name: account
+        type: foreign
+        expr: account_id
+    dimensions:
+      - name: transaction_date
+        type: time
+        type_params:
+          time_granularity: day
+      - name: transaction_type
+        type: categorical
+      - name: channel
+        type: categorical
+    measures:
+      - name: transaction_count
+        agg: count
+        expr: transaction_id
+      - name: transaction_amount_sum
+        agg: sum
+        expr: transaction_amount
+      - name: transaction_amount_avg
+        agg: average
+        expr: transaction_amount
+      - name: distinct_transacting_customers
+        agg: count_distinct
+        expr: customer_id
+
+  - name: loans
+    description: >
+      Semantic model over mart_loan_health for loan status metrics. Sourced
+      from the mart rather than dim_loan, since dim_loan intentionally
+      excludes status (it's tracked in snap_loan_status instead, and
+      mart_loan_health surfaces the current value). Note this scopes "all
+      loans" to disbursed loans only, since mart_loan_health only contains
+      loans that have reached disbursement.
+    model: ref('mart_loan_health')
+    defaults:
+      agg_time_dimension: disbursement_date
+    entities:
+      - name: loan
+        type: primary
+        expr: loan_id
+      - name: customer
+        type: foreign
+        expr: customer_id
+    dimensions:
+      - name: disbursement_date
+        type: time
+        type_params:
+          time_granularity: day
+      - name: status
+        type: categorical
+        expr: loan_status
+    measures:
+      - name: loan_count
+        agg: count
+        expr: loan_id
+
+metrics:
+  - name: monthly_active_customers
+    description: Distinct customers who made at least one transaction, viewed at monthly grain.
+    label: Monthly Active Customers
+    type: simple
+    type_params:
+      measure: distinct_transacting_customers
+
+  - name: average_transaction_value
+    description: Average transaction amount across all transactions.
+    label: Average Transaction Value
+    type: simple
+    type_params:
+      measure: transaction_amount_avg
+
+  - name: total_loans
+    description: Count of all disbursed loans (mart_loan_health only contains loans that reached disbursement).
+    label: Total Loans
+    type: simple
+    type_params:
+      measure: loan_count
+
+  - name: defaulted_loans
+    description: Count of loans currently in defaulted status.
+    label: Defaulted Loans
+    type: simple
+    type_params:
+      measure: loan_count
+    filter: "{{ Dimension('loan__status') }} = 'defaulted'"
+
+  - name: loan_default_rate
+    description: Share of all loans that are currently in defaulted status.
+    label: Loan Default Rate
+    type: ratio
+    type_params:
+      numerator: defaulted_loans
+      denominator: total_loans

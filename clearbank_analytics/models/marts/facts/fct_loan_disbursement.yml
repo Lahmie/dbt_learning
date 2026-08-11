@@ -1,0 +1,75 @@
+version: 2
+
+models:
+  - name: fct_loan_disbursement
+    description: >
+      One row per disbursement event against one approved loan. Incremental (merge)
+      on loan_id — a loan enters this fact once disbursement_date is populated.
+      status is deliberately excluded here for the same reason it's excluded from
+      dim_loan — it would go stale between incremental runs. Current status is
+      available via mart_loan_health / mart_customer_360 (sourced from snap_loan_status).
+    columns:
+      - name: loan_id
+        description: Primary key. One disbursement per loan.
+        tests:
+          - unique
+          - not_null
+          - relationships:
+              to: ref('dim_loan')
+              field: loan_id
+      - name: loan_key
+        description: Foreign key to dim_loan.
+        tests:
+          - relationships:
+              to: ref('dim_loan')
+              field: loan_key
+      - name: customer_key
+        description: Foreign key to dim_customers, resolved as-of disbursement_date.
+        tests:
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_key
+      - name: account_key
+        description: Foreign key to dim_accounts.
+        tests:
+          - relationships:
+              to: ref('dim_accounts')
+              field: account_key
+      - name: disbursement_date_key
+        description: Foreign key to dim_date.
+        tests:
+          - relationships:
+              to: ref('dim_date')
+              field: date_id
+      - name: customer_id
+        description: Natural key of the customer who holds the loan.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_id
+      - name: account_id
+        description: Natural key of the account the loan is linked to.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_accounts')
+              field: account_id
+      - name: product_type
+        tests:
+          - not_null
+      - name: approved_amount
+        description: Amount approved prior to disbursement.
+        tests:
+          - not_null
+      - name: disbursed_amount
+        tests:
+          - not_null
+      - name: disbursement_date
+        description: Date the loan was disbursed.
+        tests:
+          - not_null
+      - name: updated_at
+        description: Timestamp the loan record was last updated. Used as the incremental watermark.
+        tests:
+          - not_null

@@ -1,0 +1,71 @@
+version: 2
+
+models:
+  - name: fct_loan_repayments
+    description: >
+      One row per repayment event against one loan. Incremental (delete+insert)
+      scoped by loan_id — if any repayment on a loan is added or its status changes,
+      the loan's entire repayment history is recalculated together, since
+      outstanding_amount_after_repayment is a running total per loan.
+    columns:
+      - name: repayment_id
+        description: Primary key.
+        tests:
+          - unique
+          - not_null
+      - name: loan_key
+        description: Foreign key to dim_loan.
+        tests:
+          - relationships:
+              to: ref('dim_loan')
+              field: loan_key
+      - name: customer_key
+        description: Foreign key to dim_customers, resolved as-of repayment_date.
+        tests:
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_key
+      - name: repayment_date_key
+        description: Foreign key to dim_date.
+        tests:
+          - relationships:
+              to: ref('dim_date')
+              field: date_id
+      - name: loan_id
+        description: Natural key of the loan. Not unique here — repeats across repayment events for the same loan.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_loan')
+              field: loan_id
+      - name: customer_id
+        description: Natural key of the customer who made the repayment.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_id
+      - name: repayment_date
+        description: Date the repayment was made.
+        tests:
+          - not_null
+      - name: repayment_amount
+        tests:
+          - not_null
+      - name: status
+        tests:
+          - not_null
+          - accepted_values:
+              values: [successful, pending]
+      - name: outstanding_amount_after_repayment
+        description: Running outstanding loan balance after this repayment event.
+        tests:
+          - not_null
+      - name: created_at
+        description: Timestamp the repayment record was created.
+        tests:
+          - not_null
+      - name: updated_at
+        description: Timestamp the repayment record was last updated. Used as the incremental watermark.
+        tests:
+          - not_null

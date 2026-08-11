@@ -1,0 +1,24 @@
+with 
+    source as (
+        select 
+        customer_id,
+        first_name,
+        middle_name,
+        last_name,
+        email,
+        phone_number,
+        date_of_birth,
+        address,
+        city,
+        state,
+        country,
+        nationality,
+        gender,
+        kyc_status,
+        created_at,
+        updated_at
+
+        from {{ source('main_raw', 'raw_customers') }}
+    )
+
+select * from source

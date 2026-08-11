@@ -1,0 +1,53 @@
+version: 2
+
+models:
+  - name: dim_cards
+    description: >
+      Type 1 dimension for debit cards, sourced directly from staging (no snapshot —
+      ClearBank issues debit cards only and card attributes are treated as current-state
+      only). One row per card, overwritten on each run.
+    columns:
+      - name: card_key
+        description: Surrogate key. Primary key.
+        tests:
+          - unique
+          - not_null
+      - name: card_id
+        description: Natural/business key from the source system.
+        tests:
+          - unique
+          - not_null
+      - name: account_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_accounts')
+              field: account_id
+      - name: customer_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_id
+      - name: card_type
+        tests:
+          - not_null
+          - accepted_values:
+              values: [debit]
+      - name: status
+        tests:
+          - not_null
+          - accepted_values:
+              values: [active, blocked, expired, cancelled]
+      - name: issued_date
+        tests:
+          - not_null
+      - name: expiry_date
+        tests:
+          - not_null
+      - name: created_at
+        tests:
+          - not_null
+      - name: updated_at
+        tests:
+          - not_null

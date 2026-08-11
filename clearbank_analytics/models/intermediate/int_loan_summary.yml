@@ -1,0 +1,47 @@
+version: 2
+
+models:
+  - name: int_loan_summary
+    description: >
+      One row per loan with aggregated repayment totals and outstanding balance.
+      Reversed repayments are excluded from all calculations.
+    columns:
+      - name: loan_id
+        description: Primary key.
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        tests:
+          - not_null
+      - name: account_id
+        tests:
+          - not_null
+      - name: product_type
+        tests:
+          - not_null
+      - name: applied_amount
+        tests:
+          - not_null
+      - name: approved_amount
+        description: Nullable — null if loan was never approved.
+      - name: disbursed_amount
+        description: Nullable — null if loan was never disbursed.
+      - name: loan_status
+        tests:
+          - not_null
+          - accepted_values:
+              values: [applied, approved, disbursed, closed, defaulted]
+      - name: application_date
+        tests:
+          - not_null
+      - name: approval_date
+        description: Nullable — null if loan was never approved.
+      - name: disbursement_date
+        description: Nullable — null if loan was never disbursed.
+      - name: total_repaid
+        description: Sum of all non-reversed repayments against this loan.
+      - name: last_repayment_date
+        description: Date of the most recent non-reversed repayment. Null if no repayments made.
+      - name: outstanding_amount
+        description: disbursed_amount minus total_repaid. Null if loan was never disbursed.

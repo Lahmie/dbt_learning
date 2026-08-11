@@ -1,0 +1,130 @@
+
+# Name your project! Project names should contain only lowercase characters
+# and underscores. A good package name should reflect your organization's
+# name or the intended use of these models
+name: 'clearbank_analytics'
+version: '1.0.0'
+
+# This setting configures which "profile" dbt uses for this project.
+profile: 'clearbank_analytics'
+
+# These configurations specify where dbt should look for different types of files.
+# The `model-paths` config, for example, states that models in this project can be
+# found in the "models/" directory. You probably won't need to change these!
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:         # directories to be removed by `dbt clean`
+  - "target"
+  - "dbt_packages"
+
+
+# Configuring models
+# Full documentation: https://docs.getdbt.com/docs/configuring-models
+
+# In this example config, we tell dbt to build all models in the example/
+# directory as views. These settings can be overridden in the individual model
+# files using the `{{ config(...) }}` macro.
+models:
+  clearbank_analytics:
+    staging:
+      +materialized: view
+      +schema: staging
+    intermediate:
+      +materialized: view
+    marts:
+      dimensions:
+        +materialized: table
+      facts:
+        +materialized: incremental
+      reporting:
+        +materialized: table
+
+seeds:
+  clearbank_analytics:
+    +schema: raw
+    raw_customers:
+      +column_types:
+        customer_id: varchar
+        first_name: varchar
+        middle_name: varchar
+        last_name: varchar
+        email: varchar
+        phone_number: varchar
+        date_of_birth: date
+        address: varchar
+        city: varchar
+        state: varchar
+        country: varchar
+        nationality: varchar
+        gender: varchar
+        kyc_status: varchar
+        created_at: timestamp
+        updated_at: timestamp
+    raw_accounts:
+      +column_types:
+        account_id: varchar
+        account_number: varchar
+        customer_id: varchar
+        account_type: varchar
+        currency: varchar
+        status: varchar
+        opened_date: date
+        closed_date: date
+        created_at: timestamp
+        updated_at: timestamp
+    raw_transactions:
+      +column_types:
+        transaction_id: varchar
+        account_id: varchar
+        card_id: varchar
+        transaction_date: timestamp
+        amount: decimal(18,2)
+        currency: varchar
+        type: varchar
+        status: varchar
+        description: varchar
+        reference_number: varchar
+        channel: varchar
+        reversal_of_transaction_id: varchar
+        created_at: timestamp
+    raw_loans:
+      +column_types:
+        loan_id: varchar
+        customer_id: varchar
+        account_id: varchar
+        product_type: varchar
+        applied_amount: decimal(18,2)
+        approved_amount: decimal(18,2)
+        disbursed_amount: decimal(18,2)
+        status: varchar
+        application_date: date
+        approval_date: date
+        disbursement_date: date
+        created_at: timestamp
+        updated_at: timestamp
+    raw_loan_repayments:
+      +column_types:
+        repayment_id: varchar
+        loan_id: varchar
+        customer_id: varchar
+        repayment_date: date
+        amount: decimal(18,2)
+        status: varchar
+        created_at: timestamp
+        updated_at: timestamp
+    raw_cards:
+      +column_types:
+        card_id: varchar
+        account_id: varchar
+        customer_id: varchar
+        card_type: varchar
+        status: varchar
+        issued_date: date
+        expiry_date: date
+        created_at: timestamp
+        updated_at: timestamp

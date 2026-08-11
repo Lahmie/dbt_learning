@@ -1,0 +1,77 @@
+version: 2
+
+models:
+  - name: mart_loan_health
+    description: >
+      One row per disbursed loan, joining dim_loan with fct_loan_disbursement,
+      fct_loan_repayments and snap_loan_status (current record). Finance-facing
+      view of repayment progress and risk. Sits on top of the dimensional layer
+      only, no staging references. loan_status is sourced from snap_loan_status
+      rather than dim_loan, since dim_loan intentionally excludes status.
+    columns:
+      - name: loan_key
+        description: Surrogate key from dim_loan. Primary key.
+        tests:
+          - unique
+          - not_null
+          - relationships:
+              to: ref('dim_loan')
+              field: loan_key
+      - name: loan_id
+        description: Natural/business key of the loan.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_loan')
+              field: loan_id
+      - name: customer_id
+        description: Natural/business key of the customer who holds the loan.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_id
+      - name: original_amount
+        description: The originally applied loan amount, from dim_loan.applied_amount.
+        tests:
+          - not_null
+      - name: disbursed_amount
+        description: Amount actually disbursed, from fct_loan_disbursement.
+        tests:
+          - not_null
+      - name: disbursement_date
+        description: Date the loan was disbursed, from fct_loan_disbursement.
+        tests:
+          - not_null
+      - name: loan_status
+        description: >
+          Current loan status, from the current record (dbt_valid_to is null)
+          in snap_loan_status.
+        tests:
+          - not_null
+          - accepted_values:
+              values: [applied, approved, disbursed, closed, defaulted]
+      - name: total_repaid_to_date
+        description: Sum of successful repayments against this loan.
+        tests:
+          - not_null
+      - name: outstanding_balance
+        description: Latest known outstanding balance for the loan.
+        tests:
+          - not_null
+      - name: last_repayment_date
+        description: Date of the most recent repayment. Null if no repayments have been made yet.
+      - name: days_since_last_repayment
+        description: >
+          Days since the last repayment. If no repayment has ever been made,
+          this is measured from disbursement_date instead.
+        tests:
+          - not_null
+      - name: loan_health_flag
+        description: >
+          on_track (<=30 days since last activity), at_risk (31-90 days), or
+          defaulted (90+ days, or loan_status = defaulted).
+        tests:
+          - not_null
+          - accepted_values:
+              values: [on_track, at_risk, defaulted]

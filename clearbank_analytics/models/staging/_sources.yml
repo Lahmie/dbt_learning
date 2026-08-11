@@ -1,0 +1,20 @@
+version: 2
+
+sources:
+  - name: main_raw
+    database: dev
+    schema: main_raw
+    tables:
+      - name: raw_accounts
+        description: "Raw accounts data from the source system." 
+      - name: raw_cards
+        description: "Raw cards data from the source system."
+      - name: raw_customers
+        description: "Raw customers data from the source system."
+      - name: raw_loan_repayments
+        description: "Raw loan repayments data from the source system."
+      - name: raw_loans
+        description: "Raw loans data from the source system."
+      - name: raw_transactions
+        description: "Raw transactions data from the source system."
+      

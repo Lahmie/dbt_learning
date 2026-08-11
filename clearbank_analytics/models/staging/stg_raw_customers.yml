@@ -1,0 +1,59 @@
+version: 2
+
+models:
+  - name: stg_raw_customers
+    description: This is the staging model for raw customers. One row per customer.
+    columns:
+      - name: customer_id
+        description: Primary key.
+        tests:
+          - unique
+          - not_null
+      - name: first_name
+        tests:
+          - not_null
+      - name: middle_name
+        description: Nullable — not all customers have a middle name on record.
+      - name: last_name
+        tests:
+          - not_null
+      - name: email
+        tests:
+          - not_null
+          - unique
+      - name: phone_number
+        tests:
+          - not_null
+      - name: date_of_birth
+        tests:
+          - not_null
+      - name: address
+        tests:
+          - not_null
+      - name: city
+        tests:
+          - not_null
+      - name: state
+        tests:
+          - not_null
+      - name: country
+        tests:
+          - not_null
+      - name: nationality
+        tests:
+          - not_null
+      - name: gender
+        tests:
+          - accepted_values:
+              values: [male, female, other]
+      - name: kyc_status
+        tests:
+          - not_null
+          - accepted_values:
+              values: [pending, verified, rejected]
+      - name: created_at
+        tests:
+          - not_null
+      - name: updated_at
+        tests:
+          - not_null
