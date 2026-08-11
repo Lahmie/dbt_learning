@@ -1,0 +1,109 @@
+version: 2
+
+models:
+  - name: fct_transactions
+    description: >
+      One row per transaction event on one account. Incremental (merge) on
+      transaction_id. Reversals are separate rows (negative amount, type = credit,
+      reversal_of_transaction_id pointing back to the original transaction), so no
+      row is ever mutated after load. running_balance carries forward the last
+      posted balance per account between incremental runs.
+    columns:
+      - name: transaction_id
+        description: Primary key.
+        tests:
+          - unique
+          - not_null
+      - name: transaction_date_key
+        description: Foreign key to dim_date.
+        tests:
+          - relationships:
+              to: ref('dim_date')
+              field: date_id
+      - name: account_key
+        description: Foreign key to dim_accounts.
+        tests:
+          - relationships:
+              to: ref('dim_accounts')
+              field: account_key
+      - name: customer_key
+        description: Foreign key to dim_customers, resolved as-of transaction_date.
+        tests:
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_key
+      - name: card_key
+        description: Foreign key to dim_cards. Nullable — only populated for card-based transactions.
+        tests:
+          - relationships:
+              to: ref('dim_cards')
+              field: card_key
+      - name: account_id
+        description: Natural/business key of the account.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_accounts')
+              field: account_id
+      - name: customer_id
+        description: Natural/business key of the customer. Derived from accounts via account_id.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_id
+      - name: card_id
+        description: Natural/business key of the card. Nullable — only populated for card-based transactions.
+        tests:
+          - relationships:
+              to: ref('dim_cards')
+              field: card_id
+      - name: transaction_date
+        description: Date and time the transaction occurred.
+        tests:
+          - not_null
+      - name: transaction_amount
+        description: Transaction amount. Negative for reversal (credit) rows.
+        tests:
+          - not_null
+      - name: currency
+        tests:
+          - not_null
+      - name: transaction_type
+        tests:
+          - not_null
+          - accepted_values:
+              values: [debit, credit]
+      - name: status
+        tests:
+          - not_null
+          - accepted_values:
+              values: [completed, pending, reversed]
+      - name: description
+        description: Free-text transaction description. Nullable.
+      - name: reference_number
+        tests:
+          - not_null
+      - name: channel
+        tests:
+          - not_null
+          - accepted_values:
+              values: [atm, pos, mobile, web, transfer]
+      - name: reversal_of_transaction_id
+        description: Nullable — populated only for reversal transactions.
+        tests:
+          - relationships:
+              to: ref('fct_transactions')
+              field: transaction_id
+      - name: is_reversal
+        description: True if this transaction is a reversal of another transaction.
+        tests:
+          - not_null
+      - name: running_balance
+        description: Cumulative balance for the account after this transaction, ordered by transaction_date.
+        tests:
+          - not_null
+      - name: transaction_created_at
+        description: Timestamp the transaction record was created. Used as the incremental watermark.
+        tests:
+          - not_null

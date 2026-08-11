@@ -1,0 +1,47 @@
+version: 2
+
+models:
+  - name: int_loan_repayments_enriched
+    description: >
+      Non-reversed loan repayments joined to loans to calculate a running
+      outstanding balance after each repayment event. One row per repayment event.
+    columns:
+      - name: repayment_id
+        description: Primary key.
+        tests:
+          - unique
+          - not_null
+      - name: loan_id
+        tests:
+          - not_null
+      - name: customer_id
+        tests:
+          - not_null
+      - name: repayment_date
+        tests:
+          - not_null
+      - name: amount
+        tests:
+          - not_null
+      - name: status
+        tests:
+          - not_null
+          - accepted_values:
+              values: [successful, pending]
+      - name: disbursed_amount
+        description: Original disbursed amount from the parent loan.
+        tests:
+          - not_null
+      - name: outstanding_amount_after_repayment
+        description: >
+          Running outstanding balance after this repayment event.
+          Calculated as disbursed_amount minus cumulative repayments
+          ordered by repayment_date then created_at within each loan.
+        tests:
+          - not_null
+      - name: created_at
+        tests:
+          - not_null
+      - name: updated_at
+        tests:
+          - not_null

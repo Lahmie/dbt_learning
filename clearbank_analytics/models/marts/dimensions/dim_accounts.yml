@@ -1,0 +1,54 @@
+version: 2
+
+models:
+  - name: dim_accounts
+    description: >
+      Type 1 dimension for accounts, sourced directly from staging. One row per
+      account, overwritten on each run — no history is retained here (full status
+      history is tracked separately in snap_account_status for any downstream model
+      that needs an as-of view).
+    columns:
+      - name: account_key
+        description: Surrogate key. Primary key.
+        tests:
+          - unique
+          - not_null
+      - name: account_id
+        description: Natural/business key from the source system.
+        tests:
+          - unique
+          - not_null
+      - name: account_number
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_id
+      - name: account_type
+        tests:
+          - not_null
+          - accepted_values:
+              values: [current, savings]
+      - name: currency
+        tests:
+          - not_null
+      - name: status
+        tests:
+          - not_null
+          - accepted_values:
+              values: [active, dormant, closed]
+      - name: opened_date
+        tests:
+          - not_null
+      - name: closed_date
+        description: Nullable — populated only once the account is closed.
+      - name: created_at
+        tests:
+          - not_null
+      - name: updated_at
+        tests:
+          - not_null

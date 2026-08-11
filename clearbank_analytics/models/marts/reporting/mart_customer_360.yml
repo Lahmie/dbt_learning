@@ -1,0 +1,65 @@
+version: 2
+
+models:
+  - name: mart_customer_360
+    description: >
+      One row per customer, joining dim_customers (current record) with
+      dim_accounts, fct_transactions, dim_loan, snap_loan_status (current
+      record), fct_loan_repayments, fct_loan_disbursement and dim_cards.
+      Consumer-facing summary — sits on top of the dimensional layer only, no
+      staging references. Loan status (used for active_loan_count and
+      outstanding_loan_balance) is sourced from snap_loan_status rather than
+      dim_loan, since dim_loan intentionally excludes status.
+    columns:
+      - name: customer_key
+        description: Surrogate key of the customer's current dim_customers record.
+        tests:
+          - unique
+          - not_null
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_key
+      - name: customer_id
+        description: Natural/business key of the customer.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_id
+      - name: first_name
+        description: Customer's first name, from the current dim_customers record.
+        tests:
+          - not_null
+      - name: last_name
+        description: Customer's last name, from the current dim_customers record.
+        tests:
+          - not_null
+      - name: account_count
+        description: Number of accounts held by the customer.
+        tests:
+          - not_null
+      - name: total_transaction_volume_90d
+        description: Sum of transaction_amount across fct_transactions in the trailing 90 days.
+        tests:
+          - not_null
+      - name: active_loan_count
+        description: Count of the customer's loans currently in disbursed status.
+        tests:
+          - not_null
+      - name: outstanding_loan_balance
+        description: >
+          Sum of outstanding balance across the customer's active (disbursed) loans.
+          Per loan, this is the latest fct_loan_repayments balance, or the full
+          disbursed_amount if no repayments have been made yet.
+        tests:
+          - not_null
+      - name: has_debit_card
+        description: True if the customer holds at least one active debit card.
+        tests:
+          - not_null
+      - name: current_kyc_status
+        description: Customer's current KYC status, from the current dim_customers record.
+        tests:
+          - not_null
+          - accepted_values:
+              values: [pending, verified, rejected]

@@ -1,0 +1,57 @@
+version: 2
+
+models:
+  - name: dim_loan
+    description: >
+      Type 1 dimension for loans, sourced directly from staging. One row per loan,
+      overwritten on each run — loan terms are fixed at origination so history isn't
+      needed on the dimension itself. status is deliberately excluded here since
+      snap_loan_status already tracks it per stage; current status is surfaced in
+      mart_loan_health and mart_customer_360 via a snap_loan_status join instead of
+      being duplicated on this dimension.
+    columns:
+      - name: loan_key
+        description: Surrogate key. Primary key.
+        tests:
+          - unique
+          - not_null
+      - name: loan_id
+        description: Natural/business key from the source system.
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_id
+      - name: account_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_accounts')
+              field: account_id
+      - name: product_type
+        tests:
+          - not_null
+      - name: applied_amount
+        tests:
+          - not_null
+      - name: approved_amount
+        description: Nullable — null if the loan was never approved.
+      - name: disbursed_amount
+        description: Nullable — null if the loan was never disbursed.
+      - name: application_date
+        tests:
+          - not_null
+      - name: approval_date
+        description: Nullable — null if the loan was never approved.
+      - name: disbursement_date
+        description: Nullable — null if the loan was never disbursed.
+      - name: created_at
+        tests:
+          - not_null
+      - name: updated_at
+        tests:
+          - not_null

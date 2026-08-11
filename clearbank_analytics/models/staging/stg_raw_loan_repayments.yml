@@ -1,0 +1,34 @@
+version: 2
+
+models:
+  - name: stg_raw_loan_repayments
+    description: This is the staging model for raw loan repayments. One row per repayment event.
+    columns:
+      - name: repayment_id
+        description: Primary key.
+        tests:
+          - unique
+          - not_null
+      - name: loan_id
+        tests:
+          - not_null
+      - name: customer_id
+        tests:
+          - not_null
+      - name: repayment_date
+        tests:
+          - not_null
+      - name: amount
+        tests:
+          - not_null
+      - name: status
+        tests:
+          - not_null
+          - accepted_values:
+              values: [successful, reversed, pending]
+      - name: created_at
+        tests:
+          - not_null
+      - name: updated_at
+        tests:
+          - not_null

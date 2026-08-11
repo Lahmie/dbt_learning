@@ -1,0 +1,39 @@
+version: 2
+
+models:
+  - name: stg_raw_cards
+    description: This is the staging model for raw cards. One row per card. ClearBank issues debit cards only.
+    columns:
+      - name: card_id
+        description: Primary key.
+        tests:
+          - unique
+          - not_null
+      - name: account_id
+        tests:
+          - not_null
+      - name: customer_id
+        tests:
+          - not_null
+      - name: card_type
+        tests:
+          - not_null
+          - accepted_values:
+              values: [debit]
+      - name: status
+        tests:
+          - not_null
+          - accepted_values:
+              values: [active, blocked, expired, cancelled]
+      - name: issued_date
+        tests:
+          - not_null
+      - name: expiry_date
+        tests:
+          - not_null
+      - name: created_at
+        tests:
+          - not_null
+      - name: updated_at
+        tests:
+          - not_null
